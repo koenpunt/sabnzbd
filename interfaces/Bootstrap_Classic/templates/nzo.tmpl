@@ -1,0 +1,159 @@
+<!--#set global $topmenu="queue"#-->
+<!--#set global $statpath="../.."#-->
+<!--#set global $helpsubject="GUI+Queue"#-->
+<!--#include $webdir + "/inc_top.tmpl"#-->
+
+  <script type='text/javascript'>
+  function submit_marked(nzo_id, action_key)
+  {
+    extra = 'action_key='+action_key
+    var s;
+    var i=0;
+    while(s = document.getElementsByTagName("input")[i++])
+    {
+      if(s.type=='checkbox' && s.checked == true)
+      {
+        extra = extra + '&' + s.name + '=on'
+      }
+    }
+    //submitconfig(extra, '', '', 1)
+    url = 'nzb/'+nzo_id+'/bulk_operation'
+    lr(url, extra)
+  }
+
+  function mark_all()
+  {
+    var s;
+    var i=0;
+    while(s = document.getElementsByTagName("input")[i++])
+    {
+      if(s.type=='checkbox')
+      {
+        s.checked=true;
+      }
+    }
+  }
+  </script>
+
+  <script type='text/javascript'>
+  function unmark_all()
+  {
+    var s;
+    var i=0;
+    while(s = document.getElementsByTagName("input")[i++])
+    {
+      if(s.type=='checkbox')
+      {
+        s.checked=false;
+      }
+    }
+  }
+  </script>
+
+  <script type='text/javascript'>
+  function invert(){
+    var s;
+    var i=0;
+    while(s = document.getElementsByTagName("input")[i++])
+    {
+      if(s.type=='checkbox')
+      {
+        s.checked=!s.checked;
+      }
+    }
+  }
+  </script>
+<div class="page-header">
+	<h1>$T('nzoDetails')</h1>
+</div>
+<!--#if $varExists('slot')#-->
+<div class="row">
+	<div class="span5">
+		<form action="save" method="post">
+			<div class="control-group">
+				<label for="name">$T('nzoName'):</label>
+				<input type="text" class="span4" id="name" name="name" value="$slot.filename">
+			</div>
+			<div class="control-group">
+				<label for="processing">$T('pp'):</label>
+				<select id="processing" name="pp">
+					<option value="0" <!--#if $slot.unpackopts == "0" then "selected" else ""#-->>$T('pp-n')</option>
+					<option value="1" <!--#if $slot.unpackopts == "1" then "selected" else ""#-->>$T('pp-r')</option>
+					<option value="2" <!--#if $slot.unpackopts == "2" then "selected" else ""#-->>$T('pp-u')</option>
+					<option value="3" <!--#if $slot.unpackopts == "3" then "selected" else ""#-->>$T('pp-d')</option>
+				</select>
+			</div>
+			<!--#if $slot.priority != '2'#-->
+			<div class="control-group">
+				<label for="priority">$T('priority'):</label>
+				<select id="priority" name="priority" >
+					<option value="-100" <!--#if $slot.priority == "-100" then "selected" else ""#-->>$T('default')</option>
+					<option value="1" <!--#if $slot.priority == "1" then "selected" else ""#-->>$T('pr-high')</option>
+					<option value="0" <!--#if $slot.priority == "0" then "selected" else ""#-->>$T('pr-normal')</option>
+					<option value="-1" <!--#if $slot.priority == "-1" then "selected" else ""#-->>$T('pr-low')</option>
+				</select>
+			</div>
+			<!--#end if#-->
+			<!--#if $script_list#-->
+			<div class="control-group">
+				<label for="script">$T('script'):</label>
+				<select id="script" name="script">
+					<!--#for $sc in $script_list#-->
+					<option value="$sc" <!--#if $slot.script.lower() == $sc.lower() then "selected" else ""#-->>$Tspec($sc)</option>
+					<!--#end for#-->
+				</select>
+			</div>
+			<!--#end if#-->
+			<!--#if $cat_list#-->
+			<div class="control-group">
+				<label for="category">$T('category'):</label>
+				<select id="category" name="cat">
+					<!--#for $ct in $cat_list#-->
+					<option value="$ct" <!--#if $slot.cat.lower() == $ct.lower() then "selected" else ""#-->>$ct</option>
+					<!--#end for#-->
+				</select>
+			</div>
+			<!--#end if#-->
+			<input type="submit" class="btn btn-primary" size="40" value="$T('button-saveChanges')">
+		</form>
+	</div>
+</div>
+<!--#end if#-->
+
+<!--#if $varExists('active_files')#-->
+<div class="row">
+	<div class="span12">
+		<form action="bulk_operation">
+			<div>
+				<input type="hidden" class="btn btn-small" name="session" value="$session">
+				<input type="submit" class="btn btn-small" name="action_key" value="Delete">
+				<input type="submit" class="btn btn-small" name="action_key" value="Top">
+				<input type="submit" class="btn btn-small" name="action_key" value="Up">
+				<input type="submit" class="btn btn-small" name="action_key" value="Down">
+				<input type="submit" class="btn btn-small" name="action_key" value="Bottom">
+			</div>
+			<br>
+			$T('nzo-selection'):<a href='#' onclick='mark_all();' target='_self'>$T('nzo-all')</a>
+			<a href='#' onclick='unmark_all();' target='_self'>$T('nzo-none')</a>
+			<a href='#' onclick='invert();' target='_self'>$T('nzo-invert')</a>
+			<table class="table table-striped">
+				<tr>
+					<th></th>
+					<th>$T('nzo-filename')/$T('nzo-subject')</th>
+					<th>$T('size')</th>
+					<th>$T('nzo-age')</th>
+				</tr>
+				<!--#for $file in $active_files#-->
+				<tr class="active">
+					<td><input type="checkbox" name="${file.nzf_id}" <!--#if $file.checked then "checked" else ""#-->></td>
+					<td>${file.filename}</td>
+					<td>${file.size}</td>
+					<td>${file.age}</td>
+				</tr>
+				<!--#end for#-->
+			</table>
+		</form>
+	</div>
+</div>
+<!--#end if#-->
+<!--#include $webdir + "/inc_bottom.tmpl"#-->

@@ -1,0 +1,116 @@
+<!--#set global $topmenu="history"#-->
+<!--#set global $statpath=".."#-->
+<!--#set global $helpsubject="GUI+History"#-->
+<!--#include $webdir + "/inc_top.tmpl"#-->
+
+<div class="page-header">
+	<div class="pull-right">
+		<a href="#" data-action="history/purge" data-confirm="$T('purgeHistConf')">$T('purgeHist')</a> |
+		<a href="#" data-action="history/purge_failed" data-confirm="$T('purgeHistFailedConf')">$T('purgeHistFailed')</a> |
+		<a href="#./purge_failed?session=$session&del_files=1" data-confirm="$T('purgeFailed-Files')">$T('purgeFailed-Files')</a> |
+		<!--#if $isverbose#-->
+			<a href="#" data-action="history/tog_verbose">$T('hideDetails')</a> |
+		<!--#else#-->
+			<a href="#" data-action="history/tog_verbose">$T('showDetails')</a> |
+		<!--#end if#-->
+		<!--#if $failed_only#-->
+			<a href="#" data-action="history/tog_failed_only">$T('showAllHis')</a>
+		<!--#else#-->
+			<a href="#" data-action="history/tog_failed_only">$T('showFailedHis')</a>
+		<!--#end if#-->
+	</div>
+	<h1>$T('menu-history')</h1>
+</div>
+
+<div class="row">
+	<div class="span12">
+	
+		<p>
+		<strong>$T('sizeHist'): $total_size&nbsp;&nbsp;|&nbsp;&nbsp;$T('today'): $day_size&nbsp;&nbsp;|&nbsp;&nbsp;
+		$T('thisWeek'): $week_size&nbsp;&nbsp;|&nbsp;&nbsp;$T('thisMonth'): $month_size
+		</strong>
+		</p>
+	
+		<% import datetime %>
+		<% from sabnzbd.misc import time_format %>
+		<!--#if $lines#-->
+		<table class="table table-striped">
+			<tr>
+				<th></th>
+				<th>$T('completed')</th>
+				<th>$T('name')</th>
+				<th>$T('size')</th>
+				<th>$T('status')</th>
+				<th></th>
+			</tr>
+	  <!--#for $line in $lines #-->
+	<%
+	compl = datetime.datetime.fromtimestamp(float(line['completed'])).strftime(time_format('%Y-%m-%d %H:%M:%S'))
+	%>
+			<tr>
+				<td>
+					<a class="verbosity_link" href="./tog_verbose?session=$session&jobs=$line.nzo_id">
+						<!--#if $line.show_details then '-' else '+'#-->
+					</a>
+				</td>
+				<td>$compl</td>
+				<td>$line.name<!--#if $line.action_line#--> - $line.action_line<!--#else if $line.fail_message#--> - <span class="fail_message">$line.fail_message</span><!--#end if#--></td>
+				<td>$line.size</td><td>$Tx('post-'+$line.status)</td>
+				<td>
+				<!--#if not $line.loaded#-->
+					<!--#if $line.retry#-->
+			
+					<input type="button" class="btn btn-mini" data-action="history/delete?job=$(line.nzo_id)" data-confirm="$T('confirm')" data-confirm="$T('delFiles')" value="$T('bootstrap-delete')" >
+					<!-- <input type="submit" onclick="if(confirm('$T('confirm')')){ if (confirm('$T('delFiles')')) window.location='delete?job=$line.nzo_id&del_files=1&session=$session'; else window.location='delete?job=$line.nzo_id&del_files=0&session=$session'; return false;}" value="$T('button-del')"> -->
+					<!--#else#-->
+					<input type="button" class="btn btn-mini" data-action="history/delete?job=$(line.nzo_id)"  value="$T('bootstrap-delete')">
+					<!--#end if#-->
+				<!--#end if#-->
+				<!--#if $line.retry#-->
+					<form action="retry_pp" method="post" enctype="multipart/form-data">
+						<input type="file" name="nzbfile">
+						<input type="hidden" value="$line.nzo_id" name="job">
+						<input type="hidden" name="session" value="$session">
+						<input type="submit" class="btn btn-mini" value="$T('button-retry')">
+					</form>
+				<!--#end if#-->
+				</td>
+			</tr>
+			<!--#if $line.show_details#-->
+			<tr>
+				<td></td>
+				<td colspan="4">
+					<dl>
+						<!--#for $stage in $line.stage_log#-->
+						<dt><b>$Tx('stage-'+$stage.name.title.lower())</b></dt>
+						<!--#for $action in $stage.actions#-->
+						<dd>$action</dd>
+						<!--#end for#-->
+
+						<br />
+						<!--#end for#-->
+				
+						<!--#if $line.category#-->
+						<dt><b>$T('category')</b></dt>
+						<dd>$line.category</dd>
+
+						<br />
+						<!--#end if#-->
+				
+						<!--#if $line.storage#-->
+						<dt><b>$T('msg-path')</b></dt>
+						<dd>$line.storage</dd>
+				
+						<br />
+						<!--#end if#-->
+					</dl>
+				</td>
+				<td></td>
+			</tr>
+			<!--#end if#-->
+			<!--#end for#-->
+		</table>
+	<!--#end if#-->
+	</div>
+</div>
+<!--#include $webdir + "/inc_bottom.tmpl"#-->

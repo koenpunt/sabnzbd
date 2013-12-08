@@ -75,6 +75,7 @@ $T('onQueueFinish'):
         <input type="hidden" value="$session" name="session">
         <input type="submit" value="$T('button-pause')"></form>
       <!--#end if#-->
+      </td>
       <td><form><select onchange="location = this.options[this.selectedIndex].value;">
       <!--#for $i in xrange($noofslots)#-->
         <option value="switch?session=$session&uid1=$slot.nzo_id&uid2=$slots[i].nzo_id" <!--#if $i == $slot.index then "selected" else ""#-->>$i</option>

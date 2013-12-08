@@ -862,6 +862,9 @@ SKIN_TEXT = {
     'wizard-exit' : TT('Exit SABnzbd'), #: Wizard EXIT button on first page
     'wizard-start' : TT('Start Wizard'), #: Wizard START button on first page
 
+#Bootstrap skin
+    'bootstrap-delete' : TT('Delete'),
+
 #Special
     'yourRights' : TT('''
 SABnzbd comes with ABSOLUTELY NO WARRANTY.

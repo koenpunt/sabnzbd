@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>$mbleft MB $T('queued') - SABnzbd $version</title>
+	<link rel="stylesheet" type="text/css" href="$statpath/static/stylesheets/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="$statpath/static/stylesheets/bootstrap-responsive.min.css"/>
+
+	<link rel="stylesheet" type="text/css" href="$statpath/static/stylesheets/main.css"/>
+
+	<!--#if $varExists('have_refresh') and $have_refresh#-->
+	<meta http-equiv="refresh" content="$have_refresh">
+	<!--#end if#-->
+	<link rel="shortcut icon" href="$statpath/static/images/favicon.ico" />
+	<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="rss?mode=history&apikey=$session"/>
+	<script>
+	var SABNZBD_SESSION = '${session}';	
+	</script>
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="brand" href="">
+					<span id="first">SAB</span><span id="second">nzbd+</span><span id="third"> $version</span>
+				</a>
+				<div class="nav-collapse collapse">
+					<!--#set $mypath=$statpath+"/"+$topmenu#-->
+					<ul class="nav">
+						<!--#if $topmenu==''#-->
+							<li class="active"><a href="$mypath">$T('menu-home')</a></li>
+						<!--#else#-->
+							<li><a href="$statpath">$T('menu-home')</a></li>
+						<!--#end if#-->
+
+						<!--#if $topmenu=='queue'#-->
+							<li class="active"><a href="$mypath/">$T('menu-queue')</a></li>
+						<!--#else#-->
+							<li><a href="$statpath/queue/">$T('menu-queue')</a></li>
+						<!--#end if#-->
+
+						<!--#if $topmenu=='history'#-->
+							<li class="active"><a href="$mypath/">$T('menu-history')</a></li>
+						<!--#else#-->
+							<li><a href="$statpath/history/">$T('menu-history')</a></li>
+						<!--#end if#-->
+
+						<!--#if $topmenu=='config'#-->
+							<li class="active"><a href="$mypath/">$T('menu-config')</a></li>
+						<!--#else#-->
+							<li><a href="$statpath/config/">$T('menu-config')</a></li>
+						<!--#end if#-->
+
+						<!--#if $topmenu=='status'#-->
+							<li class="active" ><a href="$mypath/">$T('menu-cons')</a></li>
+						<!--#else#-->
+							<li><a href="$statpath/status/">$T('menu-cons')</a></li>
+						<!--#end if#-->
+					</ul>
+				</div>
+				<div class="nav-collapse collapse pull-right">
+					<ul class="nav">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">$T('menu-help')</a>
+							<ul class="dropdown-menu">
+								<li><a href="$helpuri$helpsubject/" target="_blank">$T('menu-wiki')</a></li>
+								<li><a href="http://forums.sabnzbd.org/" target="_blank">$T('menu-forums')</a></li>
+								<li><a href="http://www.sabnzbd.org/live-chat/" target="_blank">$T('menu-irc')</a></li>
+							</ul>
+						</li>
+					</ul>
+					<div id="tagline" class="catchfrase">$T('signOn')</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+		
+	<div class="container">
+		<div class="content">

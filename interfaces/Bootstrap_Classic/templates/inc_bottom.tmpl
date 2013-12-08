@@ -1,0 +1,52 @@
+		</div><!-- /.content -->
+		<footer class="footer">
+			<div class="row">
+					
+				<div class="span8 pull-left">
+					<b>$T('ft-download'):</b> $diskspace1 GB - <b>$T('ft-complete'):</b> $diskspace2 GB - <b>$T('ft-speed'):</b> ${speed}B/s - <b>$T('ft-queued'):</b> $sizeleft / $size
+					<!--#if $loadavg#-->
+					  - <b>$T('ft-sysload')</b> $loadavg
+					<!--#end if#-->
+					<!--#if $paused#-->
+					  - <b>$T('ft-paused')</b><!--#if $pause_int != "0"#-->($pause_int)<!--#end if#--><!--#if $paused_all#--><b>!</b><!--#end if#-->
+					<!--#end if#-->
+				</div>
+				
+				<div class="span3 pull-right a-right">
+					<!--#if int($cache_max)#-->
+					<!--#set $msg=$T('ft-buffer@2')%($cache_art, $cache_size)#-->
+					$msg&nbsp;&nbsp;
+					<!--#end if#-->
+					<!--#if $have_quota#-->
+					  | &nbsp;&nbsp;<strong>$T('quota-left'):</strong>&nbsp;&nbsp;$left_quota&nbsp;&frasl;&nbsp;$quota</strong>&nbsp;&nbsp;&nbsp;
+					<!--#end if#-->
+					<!--#if $new_release#-->
+					  <!--#set $msg=$T('ft-newRelease@1')%($new_release)#-->
+					  <b>$msg <a href="$new_rel_url/" target="_blank">SF.net</a></b><br>
+					<!--#end if#-->
+					<!--#if $have_warnings != "0"#-->
+					  <strong><a href="$statpath/status/">$T('ft-warning')($have_warnings)!</a></strong>
+					<!--#end if#-->
+				</div>
+			</div>
+			<!--
+				TODO Need to find a better spot for warnings
+			-->
+			<!--#if self.varExists('warning') and $warning#-->
+			<div class="row">
+				<span class="span12">
+					<h2>$T('ft-warning')</h2>
+					<b>$warning</b>
+				</span>
+			</div>
+			<!--#end if#-->
+		</footer>
+	</div> <!-- /.container -->
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+	<script src="$statpath/static/javascripts/bootstrap.min.js" ></script>
+	<script src="$statpath/static/javascripts/main.js" ></script>
+</body>
+</html>
+	<div class="footer"></div>
+	
